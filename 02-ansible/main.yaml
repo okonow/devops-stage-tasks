@@ -1,0 +1,17 @@
+- name: Install and configure Docker
+  hosts: myhosts
+  become: yes
+  roles:
+    - docker
+
+- name: Deploy containers
+  hosts: myhosts
+  gather_facts: false
+  roles:
+    - containers
+
+- name: Configure nginx balancer
+  hosts: myhosts
+  become: yes
+  roles:
+    - nginx

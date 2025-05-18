@@ -1,0 +1,7 @@
+containers:
+  - name: echost-server-1
+    port: 8081
+  - name: echost-server-2
+    port: 8082
+  - name: echost-server-3
+    port: 8083

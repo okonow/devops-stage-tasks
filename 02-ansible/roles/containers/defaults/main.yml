@@ -1,0 +1,2 @@
+container_image: docker.io/akonow/echost-server
+container_tag: 1

@@ -1,0 +1,27 @@
+upstream echo_servers {
+    # round-robin;
+    # I were choosing between round-robin and random algorithms
+    # Cause they're both have simple realization, and my echo-echo_servers
+    # don't have any special requirements for the balancing algorithm.
+    # So I don't need to use complex algorithms like ip_hash, hash, etc.
+    # These ones could be unreasonably slow down the nginx server for my simple case. 
+    # I've choosen between round-robin and random algorithms. 
+    # And choose round-robin cause it's more predictable, and better for track servers state.
+
+    {% for container in containers %}
+    server localhost:{{ container.port }};
+    {% endfor %}
+}
+
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://echo_servers;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

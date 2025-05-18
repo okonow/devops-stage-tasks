@@ -1,0 +1,25 @@
+- name: Login to private Docker registry
+  community.docker.docker_login:
+    registry_url: docker.io
+    username: "{{ docker_username }}"
+    password: "{{ docker_password }}"
+
+- name: Pull private image
+  community.docker.docker_image:
+    name: "{{ container_image }}"
+    tag: "{{ container_tag }}"
+    source: pull
+
+- name: Start containers
+  community.docker.docker_container:
+    name: "{{ item.name }}"
+    image: "{{ container_image }}:{{ container_tag }}"
+    state: started
+    detach: true
+    cleanup: true
+    ports:
+      - "{{ item.port }}:8000"
+    env:
+      SERVER_HOSTNAME: "{{ ansible_hostname }}"
+      SERVER_IP: "{{ ansible_default_ipv4.address }}"
+  with_items: "{{ containers }}"
