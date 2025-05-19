@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Stage Tasks</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+            </div>
+            <div class="nav-links">
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-title">
+                ТЕСТОВОЕ ЗАДАНИЕ CLOUD.RU
+            </div>
+            <div class="hero-button">
+                <a href="https://github.com/okonow/devops-stage-tasks" class="github-button" target="_blank">
+                    <i class="fab fa-github"></i>
+                    РЕПОЗИТОРИЙ
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+
+        <section id="docker" class="solution-section">
+            <h2>1. Docker</h2>
+            <div class="solution-content">
+                <h3>Описание задачи</h3>
+                <div class="task-description">
+                    <p>Создание Docker-образа для простого веб-приложения. Задача включает в себя:</p>
+                    <ul>
+                        <li>Требуется написать простое веб-приложение на Python/Go, которое слушает входящие соединения на порту 8000 и предоставляет страницу с информацией:</li>
+                        <ul>
+                            <li>имя хоста</li>
+                            <li>ip адрес хоста</li>
+                            <li>имя автора, которое передаётся через переменную окружения $AUTHOR</li>
+                        </ul>
+                        <li>Для приложения написать Dockerfile и запушить образ в докер хаб* (запушить в приватный регистри - пройти регистрацию в докер хаб, сделать регистри приватным).</li>
+                        <li>В ответе к задаче приложить:</li>
+                        <ul>
+                            <li>- исходный код</li>
+                            <li>- Dockerfile</li>
+                            <li>- команды, которые использовались для пуша образа в регистри</li>
+                        </ul>
+                    </ul>
+                </div>
+                <h3>Файлы проекта</h3>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/01-docker/app.py" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> app.py
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/01-docker/Dockerfile" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> Dockerfile
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/01-docker/push-to-docker.sh" class="file-link" target="_blank">
+                    <i class="fas fa-terminal"></i> Команды для сборки и публикации
+                </a>
+            </div>
+        </section>
+
+        <section id="ansible" class="solution-section">
+            <h2>2. Ansible</h2>
+            <div class="solution-content">
+                <h3>Описание задачи</h3>
+                <div class="task-description">
+                    <p>Автоматизация развертывания приложения с помощью Ansible. Задача включает:</p>
+                    <ul>
+                        Выполнить следующие задачи, используя Ansible:
+                        <ol>
+                            <li>На VM установить пакет docker-ce;</li>
+                            <li>Запустить на docker контейнеры c подготовленным Web-приложением из первой задачи в 3-х экземплярах. Для развёртывания использовать приватный регистри из первой задачи;</li>
+                            <li>Настроить балансировщик на nginx, который будет отвечать при обращении к хосту и прокидывать запрос на запущенные контейнеры. Выбрать алгоритм балансировки для приложения и обосновать свой выбор.</li>
+                        </ol>
+                        <p>В ответе к задаче приложить:</p>
+                        <ul>
+                            <li>- исходный код Ansible</li>
+                            <li>- текстовое обоснование выбранного алгоритма балансировки</li>
+                        </ul>
+                    </ul>
+                </div>
+                <h3>Обоснование выбора алгоритма балансировки</h3>
+                <div class="task-description">
+                    <p>Для балансировки нагрузки я выбрал алгоритм <strong>round-robin</strong> по следующим причинам:</p>
+                    <ul>
+                        У него простая реализация, как и у моих эхо-серверов, сложные алгоритмы вроде ip_hash будут избыточны, поэтому я выбирал между round-robin и random, 
+                        и round-robin более предсказуем и с ним проще отслеживать состояние серверов по сравнению с random.
+                    </ul>
+                </div>
+                <h3>Файлы проекта</h3>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/02-ansible/main.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> main.yaml
+                </a>
+            </div>
+        </section>
+
+        <section id="kubernetes" class="solution-section">
+            <h2>3. Kubernetes</h2>
+            <div class="solution-content">
+                <h3>Описание задачи</h3>
+                <div class="task-description">
+                    <p>Развертывание приложения в Kubernetes. Задача включает:</p>
+                    <ul>
+                        <li>Требуется написать манифест для запуска приложения из первой задачи в Kubernetes в отдельном неймспейсе в виде Deployment с 3 репликами и сервиса с типом ClusterIP.</li>
+                        <li>Выполнить следующие задачи:
+                            <ol>
+                                <li>Для приложения организовать проброс значения переменной AUTHOR;</li>
+                                <li>Реализовать readiness- и liveness- пробы;</li>
+                                <li>Использовать образ из приватного регистри из задачи 1;</li>
+                                <li>опционально: поднять ingress-controller и создать правило ingress;</li>
+                                <li>опционально: использовать helm-chart, а не raw манифест.</li>
+                            </ol>
+                        </li>
+                        <li>В ответе к задаче приложить:
+                            <ul>
+                                <li>исходный код всех манифестов</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <h3>Файлы проекта</h3>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/03-kubernetes/Chart.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> Chart.yaml
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/03-kubernetes/values.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> values.yaml
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/03-kubernetes/templates/deployment.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> deployment.yaml
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/03-kubernetes/templates/service.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> service.yaml
+                </a>
+                <a href="https://github.com/okonow/devops-stage-tasks/blob/main/03-kubernetes/templates/ingress.yaml" class="file-link" target="_blank">
+                    <i class="fas fa-file-code"></i> ingress.yaml
+                </a>
+            </div>
+        </section>
+        <section class="solution-section">
+            <h2>Структура проекта</h2>
+            <div class="solution-content">
+                <pre><code>
+                    devops-stage-tasks/
+                    ├── 01-application
+                    │   ├── .dockerignore
+                    │   ├── app.py
+                    │   ├── Dockerfile
+                    │   ├── push-to-docker.sh
+                    │   ├── requirements.txt
+                    │   └── scripts.sh
+                    ├── 02-ansible
+                    │   ├── group_vars
+                    │   │   └── all
+                    │   │       ├── main.yml
+                    │   │       └── vault.yml
+                    │   ├── roles
+                    │   │   ├── containers
+                    │   │   │   ├── defaults
+                    │   │   │   │   └── main.yml
+                    │   │   │   └── tasks
+                    │   │   │       └── main.yml
+                    │   │   ├── docker
+                    │   │   │   └── tasks
+                    │   │   │       └── main.yml
+                    │   │   └── nginx
+                    │   │       ├── tasks
+                    │   │       │   └── main.yml
+                    │   │       └── templates
+                    │   │           └── nginx.conf.j2
+                    │   ├── inventory.ini
+                    │   ├── main.yaml
+                    │   ├── nginx.conf
+                    │   ├── script.sh
+                    │   └── vault.yml
+                    ├── 03-kubernetes
+                        ├── deployment.yaml
+                        ├── ingress.yaml
+                        ├── namespace.yaml
+                        ├── secret.yaml
+                        └── service.yaml
+                </code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            <a href="https://github.com/okonow" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </p>
+        <p>DevOps Stage Tasks © 2025</p>
+    </footer>
+</body>
+</html> 
